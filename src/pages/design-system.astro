@@ -1,0 +1,277 @@
+---
+/**
+ * design-system.astro
+ * -----------------------------------------------------------------------------
+ * The Wisteria Moonlight — Design System Preview
+ *
+ * A single reference page for validating the design system:
+ * typography scale, brand colors, buttons, spacing utilities, and form
+ * primitives. Not linked from the public site — for internal QA only.
+ * -----------------------------------------------------------------------------
+ */
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const swatches = [
+  { name: "Surface",     token: "--color-surface",     value: "#F7F3EC" },
+  { name: "Surface Alt", token: "--color-surface-alt", value: "#FBF8F3" },
+  { name: "Text",        token: "--color-text",        value: "#3A3630" },
+  { name: "Accent",      token: "--color-accent",      value: "#8E7CA8" },
+  { name: "Lavender",    token: "--color-lavender",    value: "#D9CFE3" },
+  { name: "Gold",        token: "--color-gold",        value: "#C6A15B" },
+  { name: "Rose",        token: "--color-rose",        value: "#D8B4A6" },
+];
+---
+
+<BaseLayout
+  title="Design System — The Wisteria Moonlight"
+  description="Internal reference page for validating typography, color, spacing, and component foundations."
+>
+  <main class="site-container">
+
+    <!-- Page header -->
+    <header class="section">
+      <p class="eyebrow">Internal Reference</p>
+      <h1 class="hero-title">Design System</h1>
+      <p class="lede">
+        A single page for validating the tokens, typography, and component
+        foundations that shape The Wisteria Moonlight.
+      </p>
+    </header>
+
+    <!-- 1. Display Typography -->
+    <section class="section" aria-labelledby="section-display">
+      <h2 id="section-display">1. Display Typography</h2>
+      <div class="stack">
+        <p class="hero-title">Hero Title — Dreamy Finds for a Softer Everyday</p>
+        <h1>H1 — The quiet elegance of an editorial voice</h1>
+        <h2>H2 — Slow living, softly styled</h2>
+        <h3>H3 — Considered corners of the home</h3>
+        <h4>H4 — Notes from the studio</h4>
+        <h5>H5 — A small, thoughtful detail</h5>
+        <h6>H6 — Section Label</h6>
+      </div>
+    </section>
+
+    <!-- 2. Body Typography -->
+    <section class="section" aria-labelledby="section-body">
+      <h2 id="section-body">2. Body Typography</h2>
+      <div class="reading-width stack">
+        <p>
+          Paragraph — There is a particular kind of softness to a home that has
+          been lived in gently. Light lingers on linen, a cup rests where it was
+          set down, and the day slows to the pace of a page being turned.
+        </p>
+        <p><small>Small text — A quieter register for captions, footnotes, and metadata.</small></p>
+        <p>
+          Link example — Discover our <a href="#">seasonal gift guides</a> and
+          the small rituals we return to each month.
+        </p>
+      </div>
+    </section>
+
+    <!-- 3. Brand Colors -->
+    <section class="section" aria-labelledby="section-colors">
+      <h2 id="section-colors">3. Brand Colors</h2>
+      <ul class="swatch-grid" role="list">
+        {swatches.map((s) => (
+          <li class="swatch">
+            <span class="swatch__chip" style={`background-color: ${s.value};`} aria-hidden="true"></span>
+            <span class="swatch__meta">
+              <span class="swatch__name">{s.name}</span>
+              <span class="swatch__token">{s.token}</span>
+              <span class="swatch__value">{s.value}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- 4. Buttons -->
+    <section class="section" aria-labelledby="section-buttons">
+      <h2 id="section-buttons">4. Buttons</h2>
+      <div class="button-row">
+        <button type="button" class="btn btn--primary">Primary Button</button>
+        <button type="button" class="btn btn--ghost">Ghost Button</button>
+      </div>
+    </section>
+
+    <!-- 5. Spacing -->
+    <section class="section" aria-labelledby="section-spacing">
+      <h2 id="section-spacing">5. Spacing</h2>
+
+      <div class="stack">
+
+        <div class="demo">
+          <p class="demo__label">.section — vertical rhythm between page sections</p>
+          <div class="demo__box demo__box--section">
+            <span>Section padding demonstrated by this outlined block.</span>
+          </div>
+        </div>
+
+        <div class="demo">
+          <p class="demo__label">.reading-width — long-form reading measure (~720px)</p>
+          <div class="reading-width">
+            <div class="demo__box">
+              <span>
+                Reading width — comfortable line length for editorial body copy.
+                Content stays centered and narrow enough to read calmly.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo">
+          <p class="demo__label">.site-container — page container with responsive gutters</p>
+          <div class="demo__box">
+            <span>
+              This entire page is wrapped in <code>.site-container</code>, which
+              caps content at the wide max-width and applies the design system's
+              gutter tokens.
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 6. Form Preview -->
+    <section class="section" aria-labelledby="section-form">
+      <h2 id="section-form">6. Form Preview</h2>
+      <form class="reading-width stack" onsubmit="event.preventDefault();">
+        <div>
+          <label for="ds-input">Name</label>
+          <input id="ds-input" type="text" placeholder="Your name" />
+        </div>
+
+        <div>
+          <label for="ds-textarea">A short note</label>
+          <textarea id="ds-textarea" placeholder="Say hello…"></textarea>
+        </div>
+
+        <div>
+          <button type="submit" class="btn btn--primary">Send</button>
+        </div>
+      </form>
+    </section>
+
+  </main>
+</BaseLayout>
+
+<style>
+  /* Page-local styles — used only by this design system preview page. */
+
+  .eyebrow {
+    font-family: var(--font-ui);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    line-height: var(--text-display--line-height);
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 0.5em;
+  }
+
+  .lede {
+    font-family: var(--font-body);
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    max-width: 40ch;
+  }
+
+  .stack > * + * {
+    margin-top: 1.5rem;
+  }
+
+  /* Swatches */
+  .swatch-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-soft);
+    padding: 1rem;
+  }
+  .swatch__chip {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    border-radius: var(--radius-soft);
+    border: 1px solid var(--color-border-soft);
+  }
+  .swatch__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-family: var(--font-ui);
+  }
+  .swatch__name {
+    font-size: var(--text-small);
+    color: var(--color-text);
+    font-weight: 500;
+  }
+  .swatch__token {
+    font-size: var(--text-label);
+    color: var(--color-text-muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  .swatch__value {
+    font-size: var(--text-label);
+    color: var(--color-text-subtle);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    letter-spacing: 0.02em;
+  }
+
+  /* Buttons row */
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  /* Spacing demos */
+  .demo__label {
+    font-family: var(--font-ui);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+  }
+  .demo__box {
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-soft);
+    background-color: var(--color-surface-alt);
+    padding: 1.25rem 1.5rem;
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+  .demo__box--section {
+    padding-block: var(--spacing-section);
+  }
+
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.9em;
+    background-color: var(--color-lavender-soft);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+  }
+</style>
