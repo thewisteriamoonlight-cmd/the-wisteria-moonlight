@@ -1,0 +1,175 @@
+---
+/**
+ * Hero.astro
+ * -----------------------------------------------------------------------------
+ * The Wisteria Moonlight — Editorial homepage hero.
+ *
+ * A calm, typographically-led hero module. No image, no gradient, no motion —
+ * the entire composition rests on typography, whitespace, and a single quiet
+ * accent line beneath the eyebrow.
+ *
+ * Content is fixed for the homepage; presentational only.
+ * -----------------------------------------------------------------------------
+ */
+---
+
+<section class="hero" aria-labelledby="hero-headline">
+  <div class="hero__inner site-container">
+
+    <p class="hero__eyebrow">
+      <span class="hero__eyebrow-mark" aria-hidden="true"></span>
+      <span class="hero__eyebrow-text">Editorial Lifestyle Journal</span>
+    </p>
+
+    <h1 id="hero-headline" class="hero__headline">
+      Dreamy Finds for a Softer Everyday
+    </h1>
+
+    <p class="hero__lede">
+      Thoughtfully curated inspiration for beautiful homes, quiet routines,
+      meaningful gifts, timeless style, and everyday moments worth savoring.
+    </p>
+
+    <div class="hero__actions">
+      <a class="hero__cta" href="/">
+        Explore the Journal
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* -------------------------------------------------------------------------
+     Hero shell
+     A generous, quiet stage. Vertical rhythm is driven by section tokens
+     from the design system so the hero breathes consistently with the
+     rest of the page.
+     ------------------------------------------------------------------------- */
+  .hero {
+    background-color: var(--color-surface);
+    padding-block: var(--spacing-section);
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    max-width: var(--container-reading);
+  }
+
+  /* -------------------------------------------------------------------------
+     Eyebrow
+     Small-caps UI label with a short accent rule — an editorial gesture
+     that anchors the headline without adding visual noise.
+     ------------------------------------------------------------------------- */
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .hero__eyebrow-mark {
+    display: inline-block;
+    width: 2rem;
+    height: 1px;
+    background-color: var(--color-accent);
+  }
+
+  .hero__eyebrow-text {
+    display: inline-block;
+  }
+
+  /* -------------------------------------------------------------------------
+     Headline
+     Playfair Display at editorial hero scale. Balanced wrapping keeps
+     the shape of the line calm on every viewport.
+     ------------------------------------------------------------------------- */
+  .hero__headline {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw + 1rem, 4.5rem);
+    line-height: 1.05;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text);
+    margin: 0;
+    text-wrap: balance;
+    max-width: 20ch;
+  }
+
+  /* -------------------------------------------------------------------------
+     Lede / supporting copy
+     Slightly larger than body copy, softer in color, constrained to a
+     comfortable reading measure.
+     ------------------------------------------------------------------------- */
+  .hero__lede {
+    font-family: var(--font-body);
+    font-size: var(--text-h5);
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    margin: 0;
+    max-width: 44ch;
+    text-wrap: pretty;
+  }
+
+  /* -------------------------------------------------------------------------
+     Actions
+     A single pill CTA with a quiet ink-to-cream hover — no shadow, no
+     glow, no motion beyond a color transition.
+     ------------------------------------------------------------------------- */
+  .hero__actions {
+    margin-top: 1rem;
+  }
+
+  .hero__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-ui);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-ink);
+    background-color: transparent;
+    border: 1px solid var(--color-ink);
+    border-radius: var(--radius-pill);
+    padding: 0.9rem 1.9rem;
+    text-decoration: none;
+    transition: background-color var(--duration-base) var(--ease-quiet),
+                color var(--duration-base) var(--ease-quiet),
+                border-color var(--duration-base) var(--ease-quiet);
+  }
+
+  .hero__cta:hover,
+  .hero__cta:focus-visible {
+    background-color: var(--color-ink);
+    color: var(--color-cream);
+    text-decoration: none;
+  }
+
+  /* -------------------------------------------------------------------------
+     Breakpoint: desktop
+     More generous vertical stage on larger screens.
+     ------------------------------------------------------------------------- */
+  @media (min-width: 768px) {
+    .hero {
+      padding-block: var(--spacing-section-lg);
+    }
+    .hero__inner {
+      gap: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero {
+      padding-block: var(--spacing-section-xl);
+    }
+  }
+</style>
