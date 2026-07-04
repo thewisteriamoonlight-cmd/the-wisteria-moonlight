@@ -1,0 +1,79 @@
+---
+/**
+ * Navigation.astro
+ * -----------------------------------------------------------------------------
+ * The Wisteria Moonlight — Primary desktop navigation.
+ *
+ * Reusable, presentational navigation used inside the site header. Renders a
+ * semantic <nav> with the primary link set. Desktop only — the parent
+ * component (Header) controls visibility across breakpoints.
+ * -----------------------------------------------------------------------------
+ */
+
+interface Props {
+  ariaLabel?: string;
+}
+
+const { ariaLabel = "Primary" } = Astro.props;
+
+const navLinks = [
+  { label: "Home",        href: "/" },
+  { label: "Home Finds",  href: "/home-finds" },
+  { label: "Beauty",      href: "/beauty" },
+  { label: "Travel",      href: "/travel" },
+  { label: "Gift Guides", href: "/gift-guides" },
+  { label: "About",       href: "/about" },
+];
+---
+
+<nav class="primary-nav" aria-label={ariaLabel}>
+  <ul class="primary-nav__list" role="list">
+    {navLinks.map((link) => (
+      <li class="primary-nav__item">
+        <a class="primary-nav__link" href={link.href}>
+          {link.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  /* -------------------------------------------------------------------------
+     Primary navigation — desktop
+     Visibility is controlled by the parent (Header). This component styles
+     the nav itself and lets the parent decide when to show/hide it.
+     ------------------------------------------------------------------------- */
+  .primary-nav {
+    display: block;
+  }
+
+  .primary-nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .primary-nav__item {
+    margin: 0;
+  }
+
+  .primary-nav__link {
+    font-family: var(--font-ui);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text);
+    text-decoration: none;
+    padding-block: 0.5rem;
+    transition: color var(--duration-base) var(--ease-quiet);
+  }
+
+  .primary-nav__link:hover,
+  .primary-nav__link:focus-visible {
+    color: var(--color-accent);
+  }
+</style>
