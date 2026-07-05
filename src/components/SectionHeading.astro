@@ -1,0 +1,166 @@
+---
+/**
+ * SectionHeading.astro
+ * ---------------------------------------------------------
+ * Reusable editorial section heading used throughout the site.
+ *
+ * Renders a semantic heading group (eyebrow + title + description)
+ * with no surrounding layout. Compose inside any section wrapper.
+ *
+ * Examples of use:
+ *   • Featured Stories
+ *   • Latest Posts
+ *   • Categories
+ *   • Newsletter
+ *   • Related Articles
+ *   • Archive pages
+ */
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  level?: "h2" | "h3";
+  align?: "left" | "center";
+}
+
+const {
+  eyebrow,
+  title,
+  description,
+  level = "h2",
+  align = "center",
+} = Astro.props;
+
+// Dynamic heading tag — preserves real semantic heading level.
+const HeadingTag = level;
+---
+
+<header
+  class:list={[
+    "section-heading",
+    `section-heading--${align}`,
+    `section-heading--level-${level}`,
+  ]}
+>
+  {eyebrow && (
+    <p class="section-heading__eyebrow">{eyebrow}</p>
+  )}
+
+  <HeadingTag class="section-heading__title">
+    {title}
+  </HeadingTag>
+
+  {description && (
+    <p class="section-heading__description">{description}</p>
+  )}
+</header>
+
+<style>
+  /* -----------------------------------------------------------------------
+   * Root
+   * Flex column stack with generous vertical rhythm between eyebrow,
+   * title, and description. No horizontal layout logic — the parent
+   * section owns width, padding, and section spacing.
+   * Gap uses the design system base spacing unit (--spacing = 4px).
+   * ----------------------------------------------------------------------- */
+  .section-heading {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 3);
+    max-width: 100%;
+  }
+
+  /* -----------------------------------------------------------------------
+   * Alignment modifiers
+   * Center alignment additionally constrains the description to a
+   * comfortable reading measure. Left alignment intentionally does
+   * not constrain width — the parent decides.
+   * ----------------------------------------------------------------------- */
+  .section-heading--left {
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .section-heading--center {
+    text-align: center;
+    align-items: center;
+    margin-inline: auto;
+  }
+
+  /* -----------------------------------------------------------------------
+   * Eyebrow
+   * Uppercase UI label with wide tracking. Sits above the title as a
+   * quiet section label (e.g. "Browse", "Latest", "From the Journal").
+   * ----------------------------------------------------------------------- */
+  .section-heading__eyebrow {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  /* -----------------------------------------------------------------------
+   * Title
+   * The visual focus of the heading group. Playfair Display, tight
+   * tracking, balanced text wrapping for elegant multi-line titles.
+   * ----------------------------------------------------------------------- */
+  .section-heading__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text);
+    text-wrap: balance;
+  }
+
+  /* -----------------------------------------------------------------------
+   * Description
+   * Short editorial intro paragraph. Uses body serif for reading
+   * comfort. Width is constrained only when centered.
+   * ----------------------------------------------------------------------- */
+  .section-heading__description {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    color: var(--color-text-muted);
+    max-width: 100%;
+    text-wrap: pretty;
+  }
+
+  /*
+   * The 42rem cap is an intentional editorial reading measure —
+   * it keeps centered intro paragraphs to a comfortable line length
+   * (roughly 65–70 characters) so the description reads as calmly
+   * as long-form body copy, not as a stretched banner subtitle.
+   */
+  .section-heading--center .section-heading__description {
+    max-width: 42rem;
+    margin-inline: auto;
+  }
+
+  /* -----------------------------------------------------------------------
+   * Level modifier — h3 variant
+   * When the heading is nested (e.g. within a sub-section), scale the
+   * title down to h3 tokens while keeping the same visual treatment.
+   * ----------------------------------------------------------------------- */
+  .section-heading--level-h3 .section-heading__title {
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+  }
+
+  /* -----------------------------------------------------------------------
+   * Desktop rhythm
+   * Slightly more breathing room between elements at larger widths.
+   * ----------------------------------------------------------------------- */
+  @media (min-width: 1024px) {
+    .section-heading {
+      gap: calc(var(--spacing) * 4);
+    }
+  }
+</style>

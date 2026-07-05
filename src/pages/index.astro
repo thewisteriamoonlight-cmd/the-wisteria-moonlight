@@ -2,6 +2,15 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
+import Footer from "../components/Footer.astro";
+
+import FeaturedStories from "../components/FeaturedStories.astro";
+import CategoryGrid from "../components/CategoryGrid.astro";
+import LatestPosts from "../components/LatestPosts.astro";
+import Newsletter from "../components/Newsletter.astro";
+
+import posts from "../data/posts";
+import categories from "../data/categories";
 ---
 
 <BaseLayout>
@@ -10,14 +19,33 @@ import Hero from "../components/Hero.astro";
   <main>
     <Hero />
 
-    <section class="homepage-placeholder site-container section">
-      <div class="reading-width">
-        <h2>More Beautiful Things Are Coming</h2>
-        <p>
-          This space will soon feature curated stories, seasonal inspiration,
-          thoughtful recommendations, and editorial collections.
-        </p>
-      </div>
-    </section>
-  </main>
+    <FeaturedStories
+      eyebrow="Editor's Picks"
+      title="Featured Stories"
+      description="A curated selection of timeless articles chosen to inspire slower, softer everyday living."
+      stories={posts.filter((post) => post.featured)}
+    />
+
+    <CategoryGrid
+      eyebrow="Browse"
+      title="Explore by Category"
+      description="Discover thoughtfully curated collections for every corner of life."
+      categories={categories}
+    />
+
+    <LatestPosts
+      eyebrow="Recently Published"
+      title="Latest Posts"
+      description="Fresh editorial stories, beautiful discoveries and seasonal inspiration."
+      posts={posts}
+    />
+
+    <Newsletter
+      eyebrow="Stay Connected"
+      title="A Softer Inbox"
+      description="Receive thoughtful recommendations, seasonal inspiration and beautifully curated finds."
+    />
+  </main>xml
+
+  <Footer />
 </BaseLayout>

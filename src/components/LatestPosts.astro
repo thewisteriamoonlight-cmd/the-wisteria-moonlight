@@ -1,0 +1,165 @@
+---
+/**
+ * LatestPosts.astro
+ * ---------------------------------------------------------
+ * Editorial "Latest Posts" section for The Wisteria Moonlight.
+ *
+ * A pure composition component — it does not restyle anything.
+ * It renders a semantic <section> with:
+ *
+ *   • a SectionHeading (eyebrow + title + optional description)
+ *   • a responsive grid of StoryCard components
+ *
+ * Responsibilities owned by this component:
+ *   - semantic section element
+ *   - section-level spacing (vertical rhythm)
+ *   - responsive grid layout (1 → 2 → 3 columns)
+ *
+ * Responsibilities NOT owned by this component:
+ *   - card typography, hover, image treatment, focus ring
+ *     (those live inside StoryCard)
+ *   - heading typography and alignment
+ *     (those live inside SectionHeading)
+ */
+
+import type { ImageMetadata } from "astro";
+
+import SectionHeading from "./SectionHeading.astro";
+import StoryCard from "./StoryCard.astro";
+
+interface Post {
+  title: string;
+  href: string;
+  image: ImageMetadata;
+  imageAlt: string;
+  category: string;
+  excerpt?: string;
+  date?: string;
+}
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  posts: Post[];
+}
+
+const {
+  eyebrow,
+  title,
+  description,
+  posts,
+} = Astro.props;
+---
+
+<section class="latest-posts">
+  <div class="latest-posts__container">
+
+    <SectionHeading
+      eyebrow={eyebrow}
+      title={title}
+      description={description}
+      level="h2"
+      align="center"
+    />
+
+    <ul class="latest-posts__grid" role="list">
+      {posts.map((post) => (
+        <li class="latest-posts__item">
+  <StoryCard
+    title={post.title}
+    href={post.href}
+    image={post.image}
+    imageAlt={post.imageAlt}
+    category={post.category}
+    excerpt={post.excerpt}
+    date={post.date}
+  />
+</li>
+      ))}
+    </ul>
+
+  </div>
+</section>
+
+<style>
+  /* -----------------------------------------------------------------------
+   * Section shell
+   * Owns vertical rhythm between adjacent page sections. No background,
+   * no borders — the parent page decides the surface. Spacing scales
+   * up at desktop for a more generous editorial rhythm.
+   * ----------------------------------------------------------------------- */
+  .latest-posts {
+    padding-block: var(--spacing-section);
+  }
+
+  @media (min-width: 1024px) {
+    .latest-posts {
+      padding-block: var(--spacing-section-lg);
+    }
+  }
+
+  /* -----------------------------------------------------------------------
+   * Container
+   * Caps width to the standard content measure and applies a
+   * responsive page gutter. Stacks the section heading and the
+   * grid with generous space between them.
+   * ----------------------------------------------------------------------- */
+  .latest-posts__container {
+    width: 100%;
+    max-width: var(--container-content);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 12);
+  }
+
+  @media (min-width: 1024px) {
+    .latest-posts__container {
+      padding-inline: var(--spacing-gutter-lg);
+      gap: calc(var(--spacing) * 16);
+    }
+  }
+
+  /* -----------------------------------------------------------------------
+   * Grid
+   * Mobile-first single column. Expands to two columns at tablet
+   * and three columns at desktop. CSS Grid only — no masonry,
+   * no carousel, no JavaScript.
+   * ----------------------------------------------------------------------- */
+  .latest-posts__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing) * 10);
+  }
+
+  @media (min-width: 640px) {
+    .latest-posts__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .latest-posts__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: calc(var(--spacing) * 12);
+    }
+  }
+
+  /* -----------------------------------------------------------------------
+   * Grid item
+   * Neutral list-item wrapper — no visual styling. Ensures each
+   * StoryCard stretches to fill its cell so cards align cleanly
+   * across a row regardless of content length.
+   * ----------------------------------------------------------------------- */
+  .latest-posts__item {
+    margin: 0;
+    display: flex;
+  }
+</style>

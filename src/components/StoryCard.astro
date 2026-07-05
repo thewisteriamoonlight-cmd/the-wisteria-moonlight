@@ -1,0 +1,240 @@
+---
+/**
+ * StoryCard.astro
+ * ---------------------------------------------------------
+ * Reusable editorial article preview used throughout
+ * The Wisteria Moonlight.
+ *
+ * Renders a single article preview as a clickable card:
+ * media (image) + content (category, title, optional
+ * excerpt, optional date). Fully presentational — the
+ * parent owns grid, columns, spacing, and width.
+ */
+
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  title: string;
+  href: string;
+
+  image: ImageMetadata;
+  imageAlt: string;
+
+  category: string;
+
+  excerpt?: string;
+
+  date?: string;
+}
+
+const {
+  title,
+  href,
+  image,
+  imageAlt,
+  category,
+  excerpt,
+  date,
+} = Astro.props;
+---
+
+<article class="story-card">
+  <a href={href} class="story-card__link">
+    <figure class="story-card__media">
+      <Image
+        class="story-card__image"
+        src={image}
+        alt={imageAlt}
+      />
+    </figure>
+
+    <div class="story-card__content">
+      <p class="story-card__category">
+        {category}
+      </p>
+
+      <h3 class="story-card__title">
+        {title}
+      </h3>
+
+      {excerpt && (
+        <p class="story-card__excerpt">
+          {excerpt}
+        </p>
+      )}
+
+      {date && (
+        <p class="story-card__date">
+          <time datetime={date}>
+            {date}
+          </time>
+        </p>
+      )}
+    </div>
+  </a>
+</article>
+
+<style>
+  /* -----------------------------------------------------------------------
+   * Root
+   * The card is a self-contained block. It does not control its own
+   * width — the parent grid decides. Height stretches to fill the row
+   * so grids of cards align cleanly.
+   * ----------------------------------------------------------------------- */
+  .story-card {
+    height: 100%;
+    margin: 0;
+  }
+
+  /* -----------------------------------------------------------------------
+   * Link
+   * The entire card is a single anchor. Uses a flex column so the
+   * media sits above the content and the content region can grow.
+   * Underline is removed — the title carries the link affordance.
+   * ----------------------------------------------------------------------- */
+  .story-card__link {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* -----------------------------------------------------------------------
+   * Focus
+   * Quiet, accessible keyboard focus ring using the accent color.
+   * Applied only on keyboard focus so mouse users see a clean card.
+   * ----------------------------------------------------------------------- */
+ .story-card__link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+}
+
+  /* -----------------------------------------------------------------------
+   * Media
+   * Fixed 4:3 editorial aspect ratio, image fills the frame via
+   * object-fit. Overflow hidden so the hover zoom stays clipped
+   * to the card. Square edges — print-inspired, no rounding.
+   * ----------------------------------------------------------------------- */
+  .story-card__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .story-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-quiet);
+  }
+
+  /* -----------------------------------------------------------------------
+   * Hover — image
+   * Subtle zoom on card hover/focus. Editorial, not dramatic.
+   * Ownership sits on the card itself so the interaction is a
+   * property of the component, not of its inner anchor.
+   * ----------------------------------------------------------------------- */
+  .story-card:is(:hover, :focus-within) .story-card__image {
+    transform: scale(1.03);
+  }
+
+  /* -----------------------------------------------------------------------
+   * Content
+   * Text region below the image. Column layout with generous
+   * spacing between elements. flex: 1 so cards of varying content
+   * length still stretch evenly inside a grid row.
+   * ----------------------------------------------------------------------- */
+  .story-card__content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: calc(var(--spacing) * 3);
+    padding-block: calc(var(--spacing) * 5);
+  }
+
+  /* -----------------------------------------------------------------------
+   * Category
+   * Small uppercase UI label above the title. Wide tracking, muted
+   * color — the quiet editorial section marker.
+   * ----------------------------------------------------------------------- */
+  .story-card__category {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  /* -----------------------------------------------------------------------
+   * Title
+   * Primary heading of the card and the strongest visual element.
+   * Playfair Display at h3 scale with balanced wrapping for elegant
+   * multi-line titles. Color shifts to accent on card hover.
+   * ----------------------------------------------------------------------- */
+  .story-card__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    letter-spacing: var(--tracking-tight);
+    font-weight: 500;
+    color: var(--color-text);
+    text-wrap: balance;
+    transition: color var(--duration-base) var(--ease-quiet);
+  }
+
+  /* -----------------------------------------------------------------------
+   * Hover — title
+   * Title color shifts to the accent on card hover/focus.
+   * Ownership sits on the card itself for the same reason.
+   * ----------------------------------------------------------------------- */
+  .story-card:is(:hover, :focus-within) .story-card__title {
+    color: var(--color-accent);
+  }
+
+  /* -----------------------------------------------------------------------
+   * Excerpt
+   * Optional supporting paragraph. Body serif, muted color,
+   * comfortable reading rhythm, clamped to three lines so cards
+   * of varying excerpt length remain visually balanced.
+   * ----------------------------------------------------------------------- */
+  .story-card__excerpt {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+
+  /* -----------------------------------------------------------------------
+   * Date
+   * Optional metadata line in the UI font, smaller than body,
+   * pushed to the bottom of the content region so cards with
+   * varying excerpt length still align their dates neatly.
+   * ----------------------------------------------------------------------- */
+  .story-card__date {
+    margin: 0;
+    margin-top: auto;
+    padding-top: calc(var(--spacing) * 2);
+    font-family: var(--font-ui);
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-text-subtle);
+  }
+</style>
