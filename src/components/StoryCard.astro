@@ -12,10 +12,10 @@
  */
 
 import { Image } from "astro:assets";
-import type { Post } from "../data/posts";
+import type { Story } from "../lib/articles";
 
 interface Props {
-  story: Post;
+  story: Story;
 }
 
 const { story } = Astro.props;

@@ -4,10 +4,10 @@
  * ---------------------------------------------------------
  * Editorial article page for The Wisteria Moonlight.
  *
- * Now sources content from the `articles` Astro Content
- * Collection (replacing the previous src/data/posts.ts).
- * The layout — Header, ArticleHeader, ArticleContent,
- * RelatedStories, Newsletter, Footer — is unchanged.
+ * Sources content from the `articles` Astro Content
+ * Collection. The layout — Header, ArticleHeader,
+ * ArticleContent, RelatedStories, Newsletter, Footer — is
+ * unchanged.
  */
 
 import { getCollection, render } from "astro:content";
@@ -21,6 +21,8 @@ import Newsletter from "../../components/Newsletter.astro";
 import ArticleHeader from "../../components/ArticleHeader.astro";
 import ArticleContent from "../../components/ArticleContent.astro";
 import RelatedStories from "../../components/RelatedStories.astro";
+
+import { mapArticlesToStories } from "../../lib/articles";
 
 export async function getStaticPaths() {
   const articles = await getCollection("articles");
@@ -44,26 +46,13 @@ const { article } = Astro.props;
 // Render the Markdown body of this article as a component.
 const { Content } = await render(article);
 
-// RelatedStories still consumes the legacy posts.ts data shape.
-// We preserve its public API by mapping every collection entry into
-// that same shape here, so no downstream component changes are needed.
+// RelatedStories consumes the shared `Story` shape (see
+// src/lib/articles.ts) rather than raw collection entries.
 const allArticles = await getCollection("articles");
-
-const stories = allArticles.map((entry) => ({
-  title: entry.data.title,
-  slug: entry.id,
-  href: `/journal/${entry.id}`,
-  image: entry.data.heroImage,
-  imageAlt: entry.data.heroImageAlt,
-  category: entry.data.category,
-  excerpt: entry.data.excerpt,
-  date: entry.data.date.toISOString().split("T")[0],
-  featured: entry.data.featured,
-}));
+const stories = mapArticlesToStories(allArticles);
 
 // The schema stores `date` as a Date (via z.coerce.date()).
-// ArticleHeader previously received an ISO date string from posts.ts,
-// so we convert here to keep its API identical.
+// ArticleHeader expects an ISO date string, so we convert here.
 const formattedDate = article.data.date.toISOString().split("T")[0];
 ---
 

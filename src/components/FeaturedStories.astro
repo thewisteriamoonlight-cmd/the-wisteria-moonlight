@@ -22,20 +22,10 @@
  *     (those live inside SectionHeading)
  */
 
-import type { ImageMetadata } from "astro";
-
 import SectionHeading from "./SectionHeading.astro";
 import StoryCard from "./StoryCard.astro";
 
-interface Story {
-  title: string;
-  href: string;
-  image: ImageMetadata;
-  imageAlt: string;
-  category: string;
-  excerpt?: string;
-  date?: string;
-}
+import type { Story } from "../lib/articles";
 
 interface Props {
   eyebrow?: string;

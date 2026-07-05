@@ -11,27 +11,11 @@ import Newsletter from "../components/Newsletter.astro";
 
 import categories from "../data/categories";
 import { getCollection } from "astro:content";
+import { mapArticlesToStories, sortStoriesByDateDesc } from "../lib/articles";
 
 const articles = await getCollection("articles");
 
-const posts = articles
-  .map((article) => ({
-    title: article.data.title,
-    slug: article.id,
-    href: `/journal/${article.id}`,
-    image: article.data.heroImage,
-    imageAlt: article.data.heroImageAlt,
-    category: article.data.category,
-    excerpt: article.data.excerpt,
-    date: article.data.date.toISOString().split("T")[0],
-    readTime: article.data.readTime,
-    featured: article.data.featured,
-  }))
-  .sort(
-    (a, b) =>
-      new Date(b.date).getTime() -
-      new Date(a.date).getTime()
-  );
+const posts = sortStoriesByDateDesc(mapArticlesToStories(articles));
 ---
 
 <BaseLayout>
