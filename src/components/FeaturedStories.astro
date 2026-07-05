@@ -67,15 +67,7 @@ const {
     <ul class="featured-stories__grid" role="list">
       {stories.map((story) => (
        <li class="featured-stories__item">
-  <StoryCard
-    title={story.title}
-    href={story.href}
-    image={story.image}
-    imageAlt={story.imageAlt}
-    category={story.category}
-    excerpt={story.excerpt}
-    date={story.date}
-  />
+ <StoryCard story={story} />
 </li>
       ))}
     </ul>

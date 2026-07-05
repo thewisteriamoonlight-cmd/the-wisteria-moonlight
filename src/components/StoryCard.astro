@@ -12,65 +12,47 @@
  */
 
 import { Image } from "astro:assets";
-import type { ImageMetadata } from "astro";
+import type { Post } from "../data/posts";
 
 interface Props {
-  title: string;
-  href: string;
-
-  image: ImageMetadata;
-  imageAlt: string;
-
-  category: string;
-
-  excerpt?: string;
-
-  date?: string;
+  story: Post;
 }
 
-const {
-  title,
-  href,
-  image,
-  imageAlt,
-  category,
-  excerpt,
-  date,
-} = Astro.props;
+const { story } = Astro.props;
 ---
 
 <article class="story-card">
-  <a href={href} class="story-card__link">
+  <a href={story.href} class="story-card__link">
     <figure class="story-card__media">
       <Image
-        class="story-card__image"
-        src={image}
-        alt={imageAlt}
-      />
+  class="story-card__image"
+  src={story.image}
+  alt={story.imageAlt}
+/>
     </figure>
 
     <div class="story-card__content">
       <p class="story-card__category">
-        {category}
-      </p>
+  {story.category}
+</p>
 
       <h3 class="story-card__title">
-        {title}
-      </h3>
+  {story.title}
+</h3>
 
-      {excerpt && (
-        <p class="story-card__excerpt">
-          {excerpt}
-        </p>
-      )}
+      {story.excerpt && (
+  <p class="story-card__excerpt">
+    {story.excerpt}
+  </p>
+)}
 
-      {date && (
-        <p class="story-card__date">
-          <time datetime={date}>
-            {date}
-          </time>
-        </p>
-      )}
+     {story.date && (
+  <p class="story-card__date">
+    <time datetime={story.date}>
+      {story.date}
+    </time>
+  </p>
+)}
     </div>
   </a>
 </article>
@@ -107,10 +89,11 @@ const {
    * Quiet, accessible keyboard focus ring using the accent color.
    * Applied only on keyboard focus so mouse users see a clean card.
    * ----------------------------------------------------------------------- */
- .story-card__link:focus-visible {
+  .story-card__link:focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 4px;
-}
+    border-radius: var(--radius-soft);
+  }
 
   /* -----------------------------------------------------------------------
    * Media

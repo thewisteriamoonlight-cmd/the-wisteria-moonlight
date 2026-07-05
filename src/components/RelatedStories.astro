@@ -1,0 +1,48 @@
+---
+import StoryCard from "./StoryCard.astro";
+import SectionHeading from "./SectionHeading.astro";
+
+import type { Post } from "../data/posts";
+
+interface Props {
+  currentSlug: string;
+  stories: Post[];
+}
+
+const { currentSlug, stories } = Astro.props;
+
+const relatedStories = stories
+  .filter((story) => story.slug !== currentSlug)
+  .slice(0, 3);
+---
+
+<section class="related-stories section">
+  <div class="site-container">
+
+    <SectionHeading
+      eyebrow="Continue Reading"
+      title="You May Also Enjoy"
+      description="More thoughtfully curated stories from The Wisteria Moonlight."
+    />
+
+    <div class="related-grid">
+      {relatedStories.map((story) => (
+  <StoryCard story={story} />
+))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+.related-grid {
+  display: grid;
+  gap: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .related-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+</style>

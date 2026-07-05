@@ -41,6 +41,8 @@ export interface Post {
 
   date: string;
 
+  readTime: string;
+
   featured?: boolean;
 }
 
@@ -56,6 +58,7 @@ const posts: Post[] = [
     excerpt:
       "Soft textures, warm neutrals and a few quietly considered pieces are all it takes to turn a living room into a place you actually want to linger.",
     date: "2026-07-05",
+    readTime: "6 min read",
     featured: true,
   },
   {
@@ -69,6 +72,7 @@ const posts: Post[] = [
     excerpt:
       "A well-loved chair, the right lamp and a small table for tea — a reading corner doesn't need much, only the intention to slow down.",
     date: "2026-06-28",
+    readTime: "7 min read",
     featured: true,
   },
   {
@@ -82,6 +86,7 @@ const posts: Post[] = [
     excerpt:
       "Perfumes that feel like a private ritual — soft florals, warm musks and quiet trails that linger without ever asking for attention.",
     date: "2026-06-20",
+    readTime: "5 min read",
     featured: true,
   },
   {
@@ -95,6 +100,7 @@ const posts: Post[] = [
     excerpt:
       "A slow morning in Paris begins with a good café — here are the ones worth crossing an arrondissement (or an ocean) for.",
     date: "2026-06-12",
+    readTime: "6 min read",
   },
   {
     title: "Thoughtful Gift Ideas They'll Actually Use",
@@ -107,6 +113,7 @@ const posts: Post[] = [
     excerpt:
       "Gifts that feel considered, not performative — small, useful, beautiful objects that quietly become part of someone's everyday.",
     date: "2026-06-04",
+    readTime: "5 min read",
   },
   {
     title: "How to Make Your Home Feel Like Autumn",
@@ -119,6 +126,7 @@ const posts: Post[] = [
     excerpt:
       "Warm light, wool textures and the smallest touches of seasonal foraging — small shifts that quietly usher autumn into every room.",
     date: "2026-05-27",
+    readTime: "6 min read",
   },
 ];
 
