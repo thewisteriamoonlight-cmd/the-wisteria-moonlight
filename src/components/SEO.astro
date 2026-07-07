@@ -1,0 +1,107 @@
+---
+/**
+ * ============================================================================
+ * SEO.astro
+ * ============================================================================
+ *
+ * Reusable SEO metadata component for The Wisteria Moonlight.
+ *
+ * Responsibilities:
+ *   - Render <meta name="description">
+ *   - Render <link rel="canonical">
+ *   - Render Open Graph tags
+ *   - Render Twitter Card tags
+ *
+ * NON-Responsibilities (intentional):
+ *   - Does NOT render <title> — BaseLayout continues to own the document title.
+ *   - No layout
+ *   - No styling
+ *   - No page logic
+ *   - No article logic
+ *   - No category logic
+ *   - No JSON-LD, sitemap, RSS, robots, or schema (later milestones)
+ *
+ * Usage (future — not yet integrated):
+ *   <SEO
+ *     title="..."
+ *     description="..."
+ *     canonical="https://thewisteriamoonlight.com/some-path"
+ *     image="/og/some-image.jpg"
+ *     type="article"
+ *   />
+ * ============================================================================
+ */
+
+// ----------------------------------------------------------------------------
+// Props
+// ----------------------------------------------------------------------------
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  type?: "website" | "article";
+}
+
+// ----------------------------------------------------------------------------
+// Sensible defaults
+// ----------------------------------------------------------------------------
+const SITE_NAME = "The Wisteria Moonlight";
+const DEFAULT_TYPE: "website" | "article" = "website";
+
+const {
+  title,
+  description,
+  canonical,
+  image,
+  type = DEFAULT_TYPE,
+} = Astro.props;
+
+// ----------------------------------------------------------------------------
+// Derived values
+// ----------------------------------------------------------------------------
+// Resolve the canonical URL:
+//   - If a canonical is explicitly passed, use it.
+//   - Otherwise, fall back to the current request URL.
+const canonicalURL = canonical ?? Astro.url.href;
+
+// Resolve the OG/Twitter image to an absolute URL when possible.
+//   - Only compute this if an image was actually provided.
+//   - If `image` is already absolute (http/https), leave it alone.
+//   - If it is a relative path (e.g. "/og/hero.jpg"), resolve against Astro.site.
+//   - If Astro.site is not configured, fall back to the raw value.
+let resolvedImage: string | undefined;
+if (image) {
+  const isAbsolute = /^https?:\/\//i.test(image);
+  resolvedImage = isAbsolute
+    ? image
+    : Astro.site
+      ? new URL(image, Astro.site).toString()
+      : image;
+}
+---
+
+<!-- ==========================================================================
+     Primary meta
+     (title is intentionally owned by BaseLayout, not this component)
+     ========================================================================== -->
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- ==========================================================================
+     Open Graph
+     ========================================================================== -->
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+{resolvedImage && <meta property="og:image" content={resolvedImage} />}
+
+<!-- ==========================================================================
+     Twitter
+     ========================================================================== -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{resolvedImage && <meta name="twitter:image" content={resolvedImage} />}
