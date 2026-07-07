@@ -9,13 +9,21 @@ import CategoryGrid from "../components/CategoryGrid.astro";
 import LatestPosts from "../components/LatestPosts.astro";
 import Newsletter from "../components/Newsletter.astro";
 
-import categories from "../data/categories";
+import categoryMetadata from "../data/categoryMetadata";
 import { getCollection } from "astro:content";
 import { mapArticlesToStories, sortStoriesByDateDesc } from "../lib/articles";
 
 const articles = await getCollection("articles");
 
 const posts = sortStoriesByDateDesc(mapArticlesToStories(articles));
+
+// Homepage only shows categories flagged `showOnHomepage`, in
+// their editorial `order`. Both flags live in the single source
+// of truth (src/data/categoryMetadata.ts) — nothing category-
+// specific is decided here.
+const homepageCategories = categoryMetadata
+  .filter((category) => category.showOnHomepage)
+  .sort((a, b) => a.order - b.order);
 ---
 
 <BaseLayout>
@@ -35,7 +43,7 @@ const posts = sortStoriesByDateDesc(mapArticlesToStories(articles));
       eyebrow="Browse"
       title="Explore by Category"
       description="Discover thoughtfully curated collections for every corner of life."
-      categories={categories}
+      categories={homepageCategories}
     />
 
     <LatestPosts
@@ -50,7 +58,7 @@ const posts = sortStoriesByDateDesc(mapArticlesToStories(articles));
       title="A Softer Inbox"
       description="Receive thoughtful recommendations, seasonal inspiration and beautifully curated finds."
     />
-  </main>xml
+  </main>
 
   <Footer />
 </BaseLayout>

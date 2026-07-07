@@ -22,24 +22,16 @@
  *     (those live inside SectionHeading)
  */
 
-import type { ImageMetadata } from "astro";
-
 import SectionHeading from "./SectionHeading.astro";
 import CategoryCard from "./CategoryCard.astro";
 
-interface Category {
-  title: string;
-  href: string;
-  image: ImageMetadata;
-  imageAlt: string;
-  description?: string;
-}
+import type { CategoryMetadata } from "../data/categoryMetadata";
 
 interface Props {
   eyebrow?: string;
   title: string;
   description?: string;
-  categories: Category[];
+  categories: CategoryMetadata[];
 }
 
 const {
@@ -66,7 +58,7 @@ const {
        <li class="category-grid__item">
   <CategoryCard
     title={category.title}
-    href={category.href}
+    href={`/category/${category.slug}`}
     image={category.image}
     imageAlt={category.imageAlt}
     description={category.description}
