@@ -4,23 +4,45 @@
  * -----------------------------------------------------------------------------
  * The Wisteria Moonlight — foundational document layout.
  *
- * Provides the HTML document shell, essential meta tags, Google Fonts
- * (Playfair Display, Lora, Inter), the global stylesheet, and a single
- * <slot /> for page content. Header, Footer, SEO, Analytics, and OG tags
- * are intentionally NOT included at this stage.
+ * Provides the HTML document shell, essential document-level meta tags,
+ * Google Fonts (Playfair Display, Lora, Inter), the global stylesheet,
+ * and a single <slot /> for page content.
+ *
+ * Ownership boundaries:
+ *   - BaseLayout owns document-level concerns:
+ *       <title>, charset, viewport, theme-color, generator, favicon,
+ *       fonts, global stylesheet, <slot />.
+ *     <title> stays here because it is a required, always-present part
+ *     of the HTML document shell — every page needs one, and BaseLayout
+ *     is the single place that guarantees it.
+ *
+ *   - SEO.astro owns per-page metadata:
+ *       <meta name="description">, <link rel="canonical">, Open Graph,
+ *       and Twitter Card tags. These vary per page and are grouped in
+ *       one reusable component so pages don't have to hand-wire them.
+ *
+ * Header, Footer, Analytics, and structured data (JSON-LD, schema) are
+ * intentionally NOT included at this stage.
  * -----------------------------------------------------------------------------
  */
 
 import "../styles/global.css";
+import SEO from "../components/SEO.astro";
 
 interface Props {
   title?: string;
   description?: string;
+  canonical?: string;
+  image?: string;
+  type?: "website" | "article";
 }
 
 const {
   title = "The Wisteria Moonlight | Dreamy Finds for a Softer Everyday",
   description = "An editorial lifestyle publication — calm, elegant, and timeless.",
+  canonical,
+  image,
+  type = "website",
 } = Astro.props;
 ---
 
@@ -29,21 +51,38 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
     <meta name="theme-color" content="#F7F3EC" />
     <meta name="generator" content={Astro.generator} />
+
+    <!--
+      BaseLayout owns <title> — it is part of the document shell and must
+      always exist, regardless of whether a page provides SEO metadata.
+    -->
     <title>{title}</title>
+
+    <!--
+      SEO owns per-page metadata: description, canonical, Open Graph,
+      and Twitter Card tags. Keeping these in one reusable component
+      ensures every page stays consistent without hand-wiring meta tags.
+    -->
+    <SEO
+      title={title}
+      description={description}
+      canonical={canonical}
+      image={image}
+      type={type}
+    />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
-    <!-- Google Fonts: Playfair Display (display), Lora (body), Inter (UI) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&display=swap"
-    />
-  </head>
+<!-- Google Fonts: Playfair Display (display), Lora (body), Inter (UI) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&display=swap"
+/>
+</head>
   <body>
     <slot />
   </body>

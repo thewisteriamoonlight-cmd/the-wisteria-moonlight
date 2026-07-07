@@ -56,9 +56,27 @@ const stories = mapArticlesToStories(allArticles);
 const formattedDate = article.data.date.toISOString().split("T")[0];
 ---
 
+{/*
+  Phase 4.3
+  ---------------------------------------------------------
+  Supply article-specific SEO data to BaseLayout.
+
+  BaseLayout forwards these props to the shared SEO component.
+  The page never renders meta tags directly.
+
+  - canonical: generated from the article's id so the tag
+    always stays in sync with the route — never hardcoded.
+  - image: the hero image's resolved `src` string (Astro's
+    image() helper returns an ImageMetadata object; SEO expects
+    a string path so it can resolve against Astro.site).
+  - type: "article" for Open Graph article semantics.
+*/}
 <BaseLayout
   title={article.data.title}
   description={article.data.excerpt}
+  canonical={`/journal/${article.id}`}
+  image={article.data.heroImage.src}
+  type="article"
 >
   <Header />
 
