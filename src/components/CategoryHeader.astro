@@ -1,0 +1,134 @@
+---
+/**
+ * CategoryHeader.astro
+ * ---------------------------------------------------------
+ * Editorial page header for category listing pages
+ * (src/pages/category/[slug].astro).
+ *
+ * Purely presentational: renders an eyebrow, an h1 page title,
+ * an optional description, and a small "N stories" meta line.
+ * All copy is passed in as props — this component never looks
+ * up categoryMetadata or the article collection itself, so it
+ * stays reusable and has no data-fetching responsibilities.
+ *
+ * Visually similar to SectionHeading, but rendered as a true
+ * page-level <h1> (SectionHeading is reserved for in-page
+ * section headings like Featured Stories or Newsletter).
+ */
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  articleCount: number;
+}
+
+const { eyebrow, title, description, articleCount } = Astro.props;
+
+// Simple singular/plural label for the story count line.
+const storyLabel = articleCount === 1 ? "story" : "stories";
+---
+
+<header class="category-header">
+  {eyebrow && <p class="category-header__eyebrow">{eyebrow}</p>}
+
+  <h1 class="category-header__title">
+    {title}
+  </h1>
+
+  {description && (
+    <p class="category-header__description">{description}</p>
+  )}
+
+  <p class="category-header__meta">
+    {articleCount} {storyLabel}
+  </p>
+</header>
+
+<style>
+  /* -----------------------------------------------------------------------
+   * Root
+   * Centered editorial stack, matching the alignment used by
+   * SectionHeading's "center" variant. The parent page owns width
+   * and outer spacing.
+   * ----------------------------------------------------------------------- */
+  .category-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--spacing) * 3);
+    text-align: center;
+    max-width: 100%;
+  }
+
+  /* -----------------------------------------------------------------------
+   * Eyebrow
+   * Uppercase UI label, consistent with SectionHeading/ArticleHeader.
+   * ----------------------------------------------------------------------- */
+  .category-header__eyebrow {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  /* -----------------------------------------------------------------------
+   * Title
+   * True page-level heading (h1) for the category — larger than
+   * SectionHeading's h2 scale, since this is the page's primary
+   * heading rather than an in-page section label.
+   * ----------------------------------------------------------------------- */
+  .category-header__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-h1);
+    line-height: var(--text-h1--line-height);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text);
+    text-wrap: balance;
+  }
+
+  /* -----------------------------------------------------------------------
+   * Description
+   * Short editorial blurb from categoryMetadata. Constrained to a
+   * comfortable centered reading measure, same rationale as
+   * SectionHeading's centered description.
+   * ----------------------------------------------------------------------- */
+  .category-header__description {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    color: var(--color-text-muted);
+    max-width: 42rem;
+    text-wrap: pretty;
+  }
+
+  /* -----------------------------------------------------------------------
+   * Meta
+   * Quiet "N stories" count, styled like other small UI meta text
+   * (e.g. ArticleHeader's date/read-time line).
+   * ----------------------------------------------------------------------- */
+  .category-header__meta {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-text-subtle);
+  }
+
+  /* -----------------------------------------------------------------------
+   * Desktop rhythm
+   * Slightly more breathing room between elements at larger widths,
+   * matching SectionHeading's desktop gap increase.
+   * ----------------------------------------------------------------------- */
+  @media (min-width: 1024px) {
+    .category-header {
+      gap: calc(var(--spacing) * 4);
+    }
+  }
+</style>
