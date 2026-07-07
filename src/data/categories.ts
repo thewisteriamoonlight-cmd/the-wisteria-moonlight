@@ -38,7 +38,7 @@ export interface Category {
 const categories: Category[] = [
   {
     title: "Home Finds",
-    href: "/home-finds",
+    href: "/category/home-finds",
     image: homeFindsImage,
     imageAlt:
       "A calm, sunlit corner styled with linen textiles and quiet objects for the home.",
@@ -46,7 +46,7 @@ const categories: Category[] = [
   },
   {
     title: "Beauty",
-    href: "/beauty",
+    href: "/category/beauty",
     image: beautyImage,
     imageAlt:
       "A soft flat lay of skincare bottles and a folded muslin cloth on a cream surface.",
@@ -54,7 +54,7 @@ const categories: Category[] = [
   },
   {
     title: "Travel",
-    href: "/travel",
+    href: "/category/travel",
     image: travelImage,
     imageAlt:
       "A quiet boutique hotel window overlooking a hazy morning landscape.",
@@ -62,7 +62,7 @@ const categories: Category[] = [
   },
   {
     title: "Gift Guides",
-    href: "/gift-guides",
+    href: "/category/gift-guides",
     image: giftGuidesImage,
     imageAlt:
       "A carefully wrapped gift tied with silk ribbon on a pale linen backdrop.",
@@ -70,7 +70,7 @@ const categories: Category[] = [
   },
   {
     title: "Lifestyle",
-    href: "/lifestyle",
+    href: "/category/lifestyle",
     image: lifestyleImage,
     imageAlt:
       "An open journal, a ceramic mug and a sprig of dried lavender on a wooden desk.",
@@ -78,7 +78,7 @@ const categories: Category[] = [
   },
   {
     title: "Seasonal",
-    href: "/seasonal",
+    href: "/category/seasonal",
     image: seasonalImage,
     imageAlt:
       "A softly lit seasonal still life with foraged branches in a stoneware vase.",

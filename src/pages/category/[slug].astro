@@ -1,0 +1,229 @@
+---
+/**
+ * category/[slug].astro
+ * ---------------------------------------------------------
+ * Dynamic category listing page for The Wisteria Moonlight.
+ *
+ * Astro Content Collections (`getCollection("articles")`) is
+ * the only data source — there is no separate category config
+ * file yet. Every unique `article.data.category` value found
+ * in the collection becomes its own static route at build time,
+ * e.g. "Home Finds" -> /category/home-finds.
+ *
+ * Layout mirrors the rest of the site: Header, a page heading,
+ * a grid of StoryCard previews (or an empty state), Newsletter,
+ * Footer.
+ */
+
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import Newsletter from "../../components/Newsletter.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import StoryCard from "../../components/StoryCard.astro";
+
+import { mapArticlesToStories, slugifyCategory } from "../../lib/articles";
+
+/**
+ * getStaticPaths()
+ * ---------------------------------------------------------
+ * Astro calls this at build time (SSG) to know which routes to
+ * pre-render for this dynamic file. Whatever array of
+ * { params, props } objects we return here becomes one static
+ * HTML page per entry — `params.slug` fills in the `[slug]`
+ * segment of the file's own path.
+ *
+ * We don't have a fixed list of categories to loop over (no
+ * config file yet), so instead we derive the list directly from
+ * the article data itself: read every article, and collect the
+ * distinct `category` values into a `slug -> category name` map.
+ * A Map (keyed by slug) naturally de-duplicates categories that
+ * appear on more than one article, so "Home Finds" only produces
+ * a single /category/home-finds route no matter how many articles
+ * use it.
+ */
+export async function getStaticPaths() {
+  const articles = await getCollection("articles");
+
+  const categoryNamesBySlug = new Map<string, string>();
+
+  for (const article of articles) {
+    const categoryName = article.data.category;
+    const slug = slugifyCategory(categoryName);
+    categoryNamesBySlug.set(slug, categoryName);
+  }
+
+  // One route per unique category slug. We only pass the
+  // human-readable category name through as a prop; the matching
+  // articles are looked up again below, in the page body, by
+  // filtering on `Astro.params.slug` — see the comment there for
+  // why that's the cleaner and safer place to do the filtering.
+  return Array.from(categoryNamesBySlug.entries()).map(
+    ([slug, categoryName]) => ({
+      params: { slug },
+      props: { categoryName },
+    })
+  );
+}
+
+interface Props {
+  categoryName: string;
+}
+
+const { categoryName } = Astro.props;
+
+/**
+ * Filtering logic
+ * ---------------------------------------------------------
+ * getStaticPaths() above only decides which routes exist — it
+ * does not hand us the matching articles directly. We re-fetch
+ * the full collection here and filter it down to the articles
+ * whose category slugifies to the current route's `slug` param.
+ *
+ * Comparing slugs (rather than raw category strings) means this
+ * still matches correctly even if category casing/spacing drifts
+ * slightly between articles (e.g. "home finds" vs "Home Finds").
+ */
+const allArticles = await getCollection("articles");
+
+const matchingArticles: CollectionEntry<"articles">[] = allArticles.filter(
+  (article) => slugifyCategory(article.data.category) === Astro.params.slug
+);
+
+// Reuse the shared mapper — never hand-roll the collection-entry
+// -> Story transform here (see src/lib/articles.ts).
+const stories = mapArticlesToStories(matchingArticles);
+---
+
+<BaseLayout
+  title={`${categoryName} | The Wisteria Moonlight`}
+  description={`Editorial stories from The Wisteria Moonlight in the ${categoryName} category.`}
+>
+  <Header />
+
+  <main>
+    <section class="category-page">
+      <div class="category-page__container">
+
+        <SectionHeading
+          eyebrow="Category"
+          title={categoryName}
+          level="h1"
+          align="center"
+        />
+
+        {stories.length > 0 ? (
+          <ul class="category-page__grid" role="list">
+            {stories.map((story) => (
+              <li class="category-page__item">
+                <StoryCard story={story} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="category-page__empty">
+            There are no stories in {categoryName} yet — check back soon.
+          </p>
+        )}
+
+      </div>
+    </section>
+
+    <Newsletter
+      eyebrow="Stay Connected"
+      title="A Softer Inbox"
+      description="Receive thoughtful recommendations, seasonal inspiration and beautifully curated finds."
+    />
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* -----------------------------------------------------------------------
+   * Section shell
+   * Mirrors the vertical rhythm used by LatestPosts / FeaturedStories so
+   * category pages feel consistent with the rest of the site.
+   * ----------------------------------------------------------------------- */
+  .category-page {
+    padding-block: var(--spacing-section);
+  }
+
+  @media (min-width: 1024px) {
+    .category-page {
+      padding-block: var(--spacing-section-lg);
+    }
+  }
+
+  /* -----------------------------------------------------------------------
+   * Container
+   * Same content measure and gutter as the rest of the site.
+   * ----------------------------------------------------------------------- */
+  .category-page__container {
+    width: 100%;
+    max-width: var(--container-content);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 12);
+  }
+
+  @media (min-width: 1024px) {
+    .category-page__container {
+      padding-inline: var(--spacing-gutter-lg);
+      gap: calc(var(--spacing) * 16);
+    }
+  }
+
+  /* -----------------------------------------------------------------------
+   * Grid
+   * Same responsive column pattern as LatestPosts: 1 -> 2 -> 3 columns.
+   * ----------------------------------------------------------------------- */
+  .category-page__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing) * 10);
+  }
+
+  @media (min-width: 640px) {
+    .category-page__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .category-page__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: calc(var(--spacing) * 12);
+    }
+  }
+
+  .category-page__item {
+    margin: 0;
+    display: flex;
+  }
+
+  /* -----------------------------------------------------------------------
+   * Empty state
+   * Quiet, editorial placeholder copy for a category with no
+   * matching articles yet. Centered, muted, no illustration —
+   * consistent with the site's understated tone.
+   * ----------------------------------------------------------------------- */
+  .category-page__empty {
+    margin: 0;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    color: var(--color-text-muted);
+  }
+</style>

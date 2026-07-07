@@ -43,6 +43,24 @@ export interface Story {
 }
 
 /**
+ * Converts a category name into a URL-friendly slug, e.g.
+ * "Home Finds" -> "home-finds", "Gift Guides" -> "gift-guides".
+ *
+ * Shared by any code that needs to turn `article.data.category`
+ * into a route segment — currently the category listing route
+ * (src/pages/category/[slug].astro) — so the exact slugging rules
+ * live in one place rather than being reimplemented per caller.
+ */
+export function slugifyCategory(category: string): string {
+  return category
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/**
  * Maps a single `articles` collection entry to the flat `Story`
  * shape used by presentational components (StoryCard and the
  * sections that compose it).
