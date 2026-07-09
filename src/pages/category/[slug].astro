@@ -89,11 +89,23 @@ const stories = mapArticlesToStories(matchingArticles);
 // of sync with the grid rendered below it.
 const articleCount = stories.length;
 ---
+{/*
+  Category SEO
+  ---------------------------------------------------------
+  categoryMetadata is the single source of truth for the
+  category's editorial identity. The same metadata now
+  drives both page content and SEO metadata so they can
+  never drift out of sync.
+*/}
 
 <BaseLayout
-  title={`${category.title} | The Wisteria Moonlight`}
+  title={category.title}
   description={category.description}
+  canonical={`/category/${category.slug}`}
+  type="website"
 >
+
+
   <Header />
 
   <main>

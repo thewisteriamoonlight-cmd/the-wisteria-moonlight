@@ -7,7 +7,7 @@
  * Sticky, editorial header composed of:
  *   • Brand wordmark on the left (Playfair Display)
  *   • <Navigation /> on the right, desktop only
- *   • Hamburger button on the right, mobile only (no menu wired up yet)
+ *   • CSS-only details menu on smaller screens
  *
  * The primary navigation now lives in its own reusable component
  * (src/components/Navigation.astro). This file is responsible only for the
@@ -34,18 +34,17 @@ import Navigation from "./Navigation.astro";
       <Navigation />
     </div>
 
-    <!-- Mobile hamburger (visual only — menu not yet implemented) -->
-    <button
-      type="button"
-      class="site-header__toggle"
-      aria-label="Open navigation menu"
-      aria-expanded="false"
-      aria-controls="site-nav"
-    >
-      <span class="site-header__toggle-bar" aria-hidden="true"></span>
-      <span class="site-header__toggle-bar" aria-hidden="true"></span>
-      <span class="site-header__toggle-bar" aria-hidden="true"></span>
-    </button>
+    <details class="site-header__menu">
+      <summary class="site-header__toggle" aria-label="Open navigation menu">
+        <span class="site-header__toggle-bar" aria-hidden="true"></span>
+        <span class="site-header__toggle-bar" aria-hidden="true"></span>
+        <span class="site-header__toggle-bar" aria-hidden="true"></span>
+      </summary>
+
+      <div class="site-header__mobile-nav">
+        <Navigation id="site-nav" ariaLabel="Mobile" />
+      </div>
+    </details>
 
   </div>
 </header>
@@ -99,6 +98,11 @@ import Navigation from "./Navigation.astro";
   /* -------------------------------------------------------------------------
      Mobile hamburger
      ------------------------------------------------------------------------- */
+  .site-header__menu {
+    position: relative;
+    display: block;
+  }
+
   .site-header__toggle {
     display: inline-flex;
     flex-direction: column;
@@ -114,6 +118,11 @@ import Navigation from "./Navigation.astro";
     color: var(--color-text);
     transition: color var(--duration-base) var(--ease-quiet);
   }
+
+  .site-header__toggle::-webkit-details-marker {
+    display: none;
+  }
+
   .site-header__toggle:hover,
   .site-header__toggle:focus-visible {
     color: var(--color-accent);
@@ -126,21 +135,65 @@ import Navigation from "./Navigation.astro";
     background-color: currentColor;
   }
 
+  .site-header__menu[open] .site-header__toggle-bar:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .site-header__menu[open] .site-header__toggle-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-header__menu[open] .site-header__toggle-bar:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .site-header__mobile-nav {
+    position: absolute;
+    top: calc(100% + 1rem);
+    right: 0;
+    width: min(18rem, calc(100vw - (var(--spacing-gutter) * 2)));
+    padding: calc(var(--spacing) * 5);
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-soft);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .site-header__mobile-nav :global(.primary-nav__list) {
+    display: grid;
+    gap: calc(var(--spacing) * 3);
+  }
+
   /* -------------------------------------------------------------------------
      Breakpoint: desktop
      ------------------------------------------------------------------------- */
   @media (min-width: 768px) {
-    .site-header__inner {
-      min-height: 5.5rem;
-    }
-    .site-header__brand {
-      font-size: 1.75rem;
-    }
-    .site-header__nav {
-      display: block;
-    }
-    .site-header__toggle {
-      display: none;
-    }
+  .site-header__inner {
+    min-height: 5.5rem;
+    gap: 1rem;
   }
+
+  .site-header__brand {
+    font-size: 1.5rem;
+  }
+
+  .site-header__nav {
+    display: block;
+  }
+
+  .site-header__menu {
+    display: none;
+  }
+}
+
+/* Restore the roomier desktop proportions */
+@media (min-width: 1024px) {
+  .site-header__inner {
+    gap: 2rem;
+  }
+
+  .site-header__brand {
+    font-size: 1.75rem;
+  }
+}
 </style>

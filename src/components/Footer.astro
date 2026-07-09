@@ -6,19 +6,24 @@
  *
  * Simple editorial footer with:
  *   • Brand and publication description
- *   • Primary navigation
+ *   • Primary navigation sourced from categoryMetadata
  *   • Copyright row
  *
  * Uses design system tokens from global.css.
  * -----------------------------------------------------------------------------
  */
 
+import categoryMetadata from "../data/categoryMetadata";
+
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Home Finds", href: "/category/home-finds" },
-  { label: "Beauty", href: "/category/beauty" },
-  { label: "Travel", href: "/category/travel" },
-  { label: "Gift Guides", href: "/category/gift-guides" },
+  ...categoryMetadata
+    .filter((category) => category.showInNavigation)
+    .sort((a, b) => a.order - b.order)
+    .map((category) => ({
+      label: category.navigationLabel,
+      href: `/category/${category.slug}`,
+    })),
   { label: "About", href: "/about" },
 ];
 ---
@@ -41,15 +46,12 @@ const navLinks = [
       <nav class="site-footer__nav" aria-label="Footer">
         <ul class="site-footer__nav-list" role="list">
           {navLinks.map((link) => (
-  <li class="site-footer__nav-item">
-    <a
-      class="site-footer__nav-link"
-      href={link.href}
-    >
-      {link.label}
-    </a>
-  </li>
-))}
+            <li class="site-footer__nav-item">
+              <a class="site-footer__nav-link" href={link.href}>
+                {link.label}
+              </a>
+            </li>
+          ))}
         </ul>
       </nav>
     </div>

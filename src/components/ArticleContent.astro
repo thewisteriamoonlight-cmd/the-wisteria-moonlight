@@ -19,12 +19,20 @@ const { children } = Astro.props;
    * become reusable child components later.
    * ---------------------------------------------------------- */
 
-  .article-content {
-    width: 100%;
-    max-width: var(--container-reading);
-    margin-inline: auto;
-    padding-block: calc(var(--spacing) * 12);
+ .article-content {
+  width: 100%;
+  max-width: var(--container-reading);
+  margin-inline: auto;
+
+  padding-inline: var(--spacing-gutter);
+  padding-block: calc(var(--spacing) * 12);
+}
+
+@media (min-width:1024px){
+  .article-content{
+    padding-inline: var(--spacing-gutter-lg);
   }
+}
 
   .article-content :global(h2) {
     margin-top: calc(var(--spacing) * 14);

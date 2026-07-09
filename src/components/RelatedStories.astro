@@ -2,11 +2,11 @@
 import StoryCard from "./StoryCard.astro";
 import SectionHeading from "./SectionHeading.astro";
 
-import type { Post } from "../data/posts";
+import type { Story } from "../lib/articles";
 
 interface Props {
   currentSlug: string;
-  stories: Post[];
+  stories: Story[];
 }
 
 const { currentSlug, stories } = Astro.props;
@@ -16,7 +16,7 @@ const relatedStories = stories
   .slice(0, 3);
 ---
 
-<section class="related-stories section">
+<section class="related-stories">
   <div class="site-container">
 
     <SectionHeading
@@ -25,24 +25,56 @@ const relatedStories = stories
       description="More thoughtfully curated stories from The Wisteria Moonlight."
     />
 
-    <div class="related-grid">
+    <ul class="related-grid" role="list">
       {relatedStories.map((story) => (
-  <StoryCard story={story} />
-))}
-    </div>
+        <li class="related-grid__item">
+          <StoryCard story={story} />
+        </li>
+      ))}
+    </ul>
 
   </div>
 </section>
 
 <style>
-.related-grid {
-  display: grid;
-  gap: 2.5rem;
-}
-
-@media (min-width: 768px) {
-  .related-grid {
-    grid-template-columns: repeat(3, 1fr);
+  .related-stories {
+    padding-block: var(--spacing-section);
   }
-}
+
+  .related-stories .site-container {
+    max-width: var(--container-content);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 12);
+  }
+
+  .related-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing) * 10);
+  }
+
+  .related-grid__item {
+    margin: 0;
+    display: flex;
+  }
+
+  @media (min-width: 768px) {
+    .related-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .related-stories {
+      padding-block: var(--spacing-section-lg);
+    }
+
+    .related-stories .site-container {
+      gap: calc(var(--spacing) * 16);
+    }
+  }
 </style>

@@ -4,29 +4,35 @@
  * -----------------------------------------------------------------------------
  * The Wisteria Moonlight — Primary desktop navigation.
  *
- * Reusable, presentational navigation used inside the site header. Renders a
- * semantic <nav> with the primary link set. Desktop only — the parent
- * component (Header) controls visibility across breakpoints.
+ * Reusable, presentational navigation used inside the site header and mobile
+ * menu. Renders links from categoryMetadata so navigation stays aligned with
+ * the category pages generated at build time.
  * -----------------------------------------------------------------------------
  */
 
+import categoryMetadata from "../data/categoryMetadata";
+
 interface Props {
   ariaLabel?: string;
+  id?: string;
 }
 
-const { ariaLabel = "Primary" } = Astro.props;
+const { ariaLabel = "Primary", id } = Astro.props;
 
 const navLinks = [
-  { label: "Home",        href: "/" },
-  { label: "Home Finds",  href: "/category/home-finds" },
-  { label: "Beauty",      href: "/category/beauty" },
-  { label: "Travel",      href: "/category/travel" },
-  { label: "Gift Guides", href: "/category/gift-guides" },
-  { label: "About",       href: "/about" },
+  { label: "Home", href: "/" },
+  ...categoryMetadata
+    .filter((category) => category.showInNavigation)
+    .sort((a, b) => a.order - b.order)
+    .map((category) => ({
+      label: category.navigationLabel,
+      href: `/category/${category.slug}`,
+    })),
+  { label: "About", href: "/about" },
 ];
 ---
 
-<nav class="primary-nav" aria-label={ariaLabel}>
+<nav id={id} class="primary-nav" aria-label={ariaLabel}>
   <ul class="primary-nav__list" role="list">
     {navLinks.map((link) => (
       <li class="primary-nav__item">
@@ -48,14 +54,20 @@ const navLinks = [
     display: block;
   }
 
+.primary-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+@media (min-width: 1024px) {
   .primary-nav__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
     gap: 2rem;
   }
+}
 
   .primary-nav__item {
     margin: 0;

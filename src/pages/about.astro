@@ -1,0 +1,96 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Newsletter from "../components/Newsletter.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+---
+
+<BaseLayout
+  title="About | The Wisteria Moonlight"
+  description="A quiet note on the editorial point of view behind The Wisteria Moonlight."
+  canonical="/about"
+>
+  <Header />
+
+  <main>
+    <section class="about-page">
+      <div class="about-page__container">
+        <SectionHeading
+          eyebrow="About"
+          title="A quiet place for beautiful everyday living"
+          description="The Wisteria Moonlight is an editorial lifestyle journal for thoughtful homes, graceful routines, meaningful gifts, and slow discoveries."
+          level="h1"
+          align="center"
+        />
+
+        <div class="about-page__content">
+          <p>
+            This journal gathers the small details that make daily life feel
+            considered: a reading corner with good light, a fragrance that marks
+            a season, a cafe worth lingering in, a gift chosen with care.
+          </p>
+
+          <p>
+            Every story is shaped with a softer pace in mind. The aim is not to
+            chase more, but to notice better: rooms that invite rest, objects
+            that earn their place, rituals that make ordinary hours feel tended.
+          </p>
+
+          <p>
+            Browse by category, wander through the latest journal notes, or
+            return whenever you need a calm edit of beautiful things.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <Newsletter
+      eyebrow="Stay Connected"
+      title="A Softer Inbox"
+      description="Receive thoughtful recommendations, seasonal inspiration and beautifully curated finds."
+    />
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .about-page {
+    padding-block: var(--spacing-section);
+  }
+
+  .about-page__container {
+    width: 100%;
+    max-width: var(--container-reading);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 12);
+  }
+
+  .about-page__content {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 5);
+  }
+
+  .about-page__content p {
+    margin: 0;
+    font-size: var(--text-body);
+    line-height: 1.9;
+    color: var(--color-text);
+  }
+
+  @media (min-width: 1024px) {
+    .about-page {
+      padding-block: var(--spacing-section-lg);
+    }
+
+    .about-page__container {
+      padding-inline: var(--spacing-gutter-lg);
+      gap: calc(var(--spacing) * 16);
+    }
+  }
+</style>

@@ -45,12 +45,22 @@ const {
 
 <style>
 .article-header{
+  width:100%;
   max-width:var(--container-reading);
   margin-inline:auto;
-  padding-block:var(--spacing-section);
+
+  padding-inline: var(--spacing-gutter);
+  padding-block: var(--spacing-section);
+
   display:flex;
   flex-direction:column;
-  gap:1.5rem;
+  gap: calc(var(--spacing) * 6);
+}
+
+@media (min-width:1024px){
+  .article-header{
+    padding-inline: var(--spacing-gutter-lg);
+  }
 }
 
 .article-header__category{

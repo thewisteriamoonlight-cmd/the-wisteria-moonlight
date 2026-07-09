@@ -4,16 +4,25 @@
  * -----------------------------------------------------------------------------
  * The Wisteria Moonlight — Editorial homepage hero.
  *
- * A calm, typographically-led hero module. No image, no gradient, no motion —
- * the entire composition rests on typography, whitespace, and a single quiet
- * accent line beneath the eyebrow.
+ * A calm first viewport with local editorial photography and text layered
+ * directly over the image.
  *
  * Content is fixed for the homepage; presentational only.
  * -----------------------------------------------------------------------------
  */
+import { Image } from "astro:assets";
+import heroImage from "../assets/images/posts/cozy-living.jpg";
 ---
 
 <section class="hero" aria-labelledby="hero-headline">
+  <Image
+    class="hero__image"
+    src={heroImage}
+    alt=""
+    aria-hidden="true"
+    loading="eager"
+  />
+
   <div class="hero__inner site-container">
 
     <p class="hero__eyebrow">
@@ -22,16 +31,16 @@
     </p>
 
     <h1 id="hero-headline" class="hero__headline">
-      Dreamy Finds for a Softer Everyday
+      The Wisteria Moonlight
     </h1>
 
     <p class="hero__lede">
-      Thoughtfully curated inspiration for beautiful homes, quiet routines,
+      Dreamy finds for softer days: beautiful homes, quiet routines,
       meaningful gifts, timeless style, and everyday moments worth savoring.
     </p>
 
     <div class="hero__actions">
-      <a class="hero__cta" href="/">
+      <a class="hero__cta" href="#latest-posts">
         Explore the Journal
       </a>
     </div>
@@ -47,13 +56,36 @@
      rest of the page.
      ------------------------------------------------------------------------- */
   .hero {
-    background-color: var(--color-surface);
+    position: relative;
+    min-height: clamp(34rem, 76vh, 46rem);
+    isolation: isolate;
+    overflow: hidden;
+    background-color: var(--color-surface-inverse);
     padding-block: var(--spacing-section);
   }
 
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: color-mix(in oklab, var(--color-ink) 38%, transparent);
+  }
+
+  .hero__image {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   .hero__inner {
+    min-height: calc(clamp(34rem, 76vh, 46rem) - (var(--spacing-section) * 2));
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: flex-start;
     gap: 1.5rem;
     max-width: var(--container-reading);
@@ -73,14 +105,14 @@
     font-size: var(--text-label);
     letter-spacing: var(--tracking-widest);
     text-transform: uppercase;
-    color: var(--color-text-muted);
+    color: var(--color-cream);
   }
 
   .hero__eyebrow-mark {
     display: inline-block;
     width: 2rem;
     height: 1px;
-    background-color: var(--color-accent);
+    background-color: var(--color-rose-soft);
   }
 
   .hero__eyebrow-text {
@@ -97,7 +129,7 @@
     font-size: clamp(2.5rem, 6vw + 1rem, 4.5rem);
     line-height: 1.05;
     letter-spacing: var(--tracking-tight);
-    color: var(--color-text);
+    color: var(--color-cream);
     margin: 0;
     text-wrap: balance;
     max-width: 20ch;
@@ -112,7 +144,7 @@
     font-family: var(--font-body);
     font-size: var(--text-h5);
     line-height: 1.7;
-    color: var(--color-text-muted);
+    color: var(--color-cream);
     margin: 0;
     max-width: 44ch;
     text-wrap: pretty;
@@ -137,8 +169,8 @@
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
     color: var(--color-ink);
-    background-color: transparent;
-    border: 1px solid var(--color-ink);
+    background-color: var(--color-cream);
+    border: 1px solid var(--color-cream);
     border-radius: var(--radius-pill);
     padding: 0.9rem 1.9rem;
     text-decoration: none;
@@ -149,7 +181,7 @@
 
   .hero__cta:hover,
   .hero__cta:focus-visible {
-    background-color: var(--color-ink);
+    background-color: transparent;
     color: var(--color-cream);
     text-decoration: none;
   }
@@ -161,6 +193,9 @@
   @media (min-width: 768px) {
     .hero {
       padding-block: var(--spacing-section-lg);
+    }
+    .hero__inner {
+      min-height: calc(clamp(34rem, 76vh, 46rem) - (var(--spacing-section-lg) * 2));
     }
     .hero__inner {
       gap: 2rem;

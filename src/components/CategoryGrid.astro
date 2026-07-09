@@ -55,15 +55,15 @@ const {
 
     <ul class="category-grid__grid" role="list">
       {categories.map((category) => (
-       <li class="category-grid__item">
-  <CategoryCard
-    title={category.title}
-    href={`/category/${category.slug}`}
-    image={category.image}
-    imageAlt={category.imageAlt}
-    description={category.description}
-  />
-</li>
+        <li class="category-grid__item">
+          <CategoryCard
+            title={category.title}
+            href={`/category/${category.slug}`}
+            image={category.image}
+            imageAlt={category.imageAlt}
+            description={category.description}
+          />
+        </li>
       ))}
     </ul>
 

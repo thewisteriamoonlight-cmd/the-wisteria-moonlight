@@ -42,10 +42,9 @@
  * artwork, carried over unchanged from the previous
  * src/data/categories.ts (this file replaces it).
  *
- * Note on `showInNavigation` / `navigationLabel`: these fields
- * describe intent only. The primary nav (Navigation.astro) and
- * footer nav (Footer.astro) are still hardcoded and do not yet
- * read from this file — wiring them up is a future refactor.
+ * Note on `showInNavigation` / `navigationLabel`: the primary
+ * nav (Navigation.astro) and footer nav (Footer.astro) both read
+ * these fields directly, so navigation changes stay centralized.
  */
 
 import type { ImageMetadata } from "astro";

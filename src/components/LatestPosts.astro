@@ -42,7 +42,7 @@ const {
 } = Astro.props;
 ---
 
-<section class="latest-posts">
+<section id="latest-posts" class="latest-posts">
   <div class="latest-posts__container">
 
     <SectionHeading
@@ -56,8 +56,8 @@ const {
     <ul class="latest-posts__grid" role="list">
       {posts.map((post) => (
         <li class="latest-posts__item">
- <StoryCard story={post} />
-</li>
+          <StoryCard story={post} />
+        </li>
       ))}
     </ul>
 
