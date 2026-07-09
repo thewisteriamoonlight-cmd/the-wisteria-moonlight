@@ -1,0 +1,12 @@
+# -----------------------------------------------------------------------------
+# The Wisteria Moonlight
+# robots.txt
+#
+# Allows search engines to crawl the public website and points them to the
+# automatically generated sitemap produced by Astro.
+# -----------------------------------------------------------------------------
+
+User-agent: *
+Allow: /
+
+Sitemap: https://thewisteriamoonlight.com/sitemap-index.xml
