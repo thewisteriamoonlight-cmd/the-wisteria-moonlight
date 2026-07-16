@@ -6,6 +6,11 @@ heroImage: "../../assets/images/posts/paris-cafe.jpg"
 heroImageAlt: "A quiet Parisian café interior with marble tables, café-au-lait cups and a small vase of fresh flowers."
 date: 2026-06-12
 readTime: "7 min read"
+author: "The Wisteria Moonlight Editors"
+tags:
+  - paris
+  - cafes
+  - slow travel
 ---
 
 Paris is a city that rewards sitting still. The right café, on the right

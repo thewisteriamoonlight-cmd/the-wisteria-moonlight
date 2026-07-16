@@ -11,6 +11,12 @@
 
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
+import categoryMetadata from "./data/categoryMetadata";
+
+const categoryTitles = categoryMetadata.map((category) => category.title) as [
+  string,
+  ...string[],
+];
 
 const articles = defineCollection({
   loader: glob({
@@ -21,11 +27,14 @@ const articles = defineCollection({
     z.object({
       title: z.string(),
       excerpt: z.string(),
-      category: z.string(),
+      category: z.enum(categoryTitles),
       heroImage: image(),
       heroImageAlt: z.string(),
       date: z.coerce.date(),
+      updatedDate: z.coerce.date().optional(),
       readTime: z.string(),
+      author: z.string().optional(),
+      tags: z.array(z.string()).default([]),
       featured: z.boolean().optional(),
     }),
 });

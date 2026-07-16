@@ -22,6 +22,7 @@
 
 import type { ImageMetadata } from "astro";
 import type { CollectionEntry } from "astro:content";
+import { SITE } from "../data/siteMetadata";
 
 export interface Story {
   title: string;
@@ -38,6 +39,10 @@ export interface Story {
   date: string;
 
   readTime: string;
+
+  author: string;
+
+  tags: string[];
 
   featured?: boolean;
 }
@@ -78,6 +83,8 @@ export function mapArticleToStory(
     excerpt: entry.data.excerpt,
     date: entry.data.date.toISOString().split("T")[0],
     readTime: entry.data.readTime,
+    author: entry.data.author ?? SITE.defaultAuthor,
+    tags: entry.data.tags,
     featured: entry.data.featured,
   };
 }
@@ -97,4 +104,37 @@ export function sortStoriesByDateDesc(stories: Story[]): Story[] {
   return [...stories].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
+}
+
+/**
+ * Scores related stories by shared category and tags.
+ * This keeps related article selection centralized as the archive grows.
+ */
+export function getRelatedStories(
+  currentStory: Story,
+  stories: Story[],
+  limit = 3
+): Story[] {
+  const currentTags = new Set(currentStory.tags);
+
+  return stories
+    .filter((story) => story.slug !== currentStory.slug)
+    .map((story) => {
+      const sharedTags = story.tags.filter((tag) => currentTags.has(tag)).length;
+      const categoryScore = story.category === currentStory.category ? 3 : 0;
+
+      return {
+        story,
+        score: categoryScore + sharedTags,
+      };
+    })
+    .sort((a, b) => {
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+
+      return new Date(b.story.date).getTime() - new Date(a.story.date).getTime();
+    })
+    .slice(0, limit)
+    .map(({ story }) => story);
 }

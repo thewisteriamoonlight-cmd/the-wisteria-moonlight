@@ -3,38 +3,40 @@ import StoryCard from "./StoryCard.astro";
 import SectionHeading from "./SectionHeading.astro";
 
 import type { Story } from "../lib/articles";
+import { getRelatedStories } from "../lib/articles";
 
 interface Props {
-  currentSlug: string;
+  currentStory: Story;
   stories: Story[];
 }
 
-const { currentSlug, stories } = Astro.props;
+const { currentStory, stories } = Astro.props;
 
-const relatedStories = stories
-  .filter((story) => story.slug !== currentSlug)
-  .slice(0, 3);
+const relatedStories = getRelatedStories(currentStory, stories);
+const hasRelatedStories = relatedStories.length > 0;
 ---
 
-<section class="related-stories">
-  <div class="site-container">
+{hasRelatedStories && (
+  <section class="related-stories">
+    <div class="site-container">
 
-    <SectionHeading
-      eyebrow="Continue Reading"
-      title="You May Also Enjoy"
-      description="More thoughtfully curated stories from The Wisteria Moonlight."
-    />
+      <SectionHeading
+        eyebrow="Continue Reading"
+        title="You May Also Enjoy"
+        description="More thoughtfully curated stories from The Wisteria Moonlight."
+      />
 
-    <ul class="related-grid" role="list">
-      {relatedStories.map((story) => (
-        <li class="related-grid__item">
-          <StoryCard story={story} />
-        </li>
-      ))}
-    </ul>
+      <ul class="related-grid" role="list">
+        {relatedStories.map((story) => (
+          <li class="related-grid__item">
+            <StoryCard story={story} />
+          </li>
+        ))}
+      </ul>
 
-  </div>
-</section>
+    </div>
+  </section>
+)}
 
 <style>
   .related-stories {

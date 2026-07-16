@@ -6,6 +6,11 @@ heroImage: "../../assets/images/posts/perfume.jpg"
 heroImageAlt: "A trio of glass perfume bottles arranged on a cream marble surface with a folded silk ribbon."
 date: 2026-06-20
 readTime: "4 min read"
+author: "The Wisteria Moonlight Editors"
+tags:
+  - fragrance
+  - beauty rituals
+  - soft florals
 featured: true
 ---
 

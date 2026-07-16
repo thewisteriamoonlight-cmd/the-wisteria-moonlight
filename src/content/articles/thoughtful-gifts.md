@@ -6,6 +6,11 @@ heroImage: "../../assets/images/posts/gift-ideas.jpg"
 heroImageAlt: "A collection of small wrapped gifts tied with silk ribbon on a pale linen backdrop."
 date: 2026-06-04
 readTime: "6 min read"
+author: "The Wisteria Moonlight Editors"
+tags:
+  - gifts
+  - hosting
+  - thoughtful living
 ---
 
 The best gifts are the ones the recipient keeps reaching for six months later

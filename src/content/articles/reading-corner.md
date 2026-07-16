@@ -6,6 +6,11 @@ heroImage: "../../assets/images/posts/reading-corner.jpg"
 heroImageAlt: "A calm reading nook by a window with a linen armchair, a stack of books and a small ceramic lamp."
 date: 2026-06-28
 readTime: "5 min read"
+author: "The Wisteria Moonlight Editors"
+tags:
+  - reading
+  - home rituals
+  - lifestyle
 featured: true
 ---
 

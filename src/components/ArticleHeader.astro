@@ -7,6 +7,8 @@ interface Props {
   title: string;
   date: string;
   readTime: string;
+  author?: string;
+  updatedDate?: string;
   image: ImageMetadata;
   imageAlt: string;
 }
@@ -16,6 +18,8 @@ const {
   title,
   date,
   readTime,
+  author,
+  updatedDate,
   image,
   imageAlt,
 } = Astro.props;
@@ -32,7 +36,13 @@ const {
   </h1>
 
   <p class="article-header__meta">
-    {date} • {readTime}
+    {author && <span>{author} • </span>}
+    <time datetime={date}>{date}</time> • {readTime}
+    {updatedDate && (
+      <span>
+        {" "}• Updated <time datetime={updatedDate}>{updatedDate}</time>
+      </span>
+    )}
   </p>
 
   <Image

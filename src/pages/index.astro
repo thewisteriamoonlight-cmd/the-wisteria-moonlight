@@ -12,6 +12,8 @@ import Newsletter from "../components/Newsletter.astro";
 import categoryMetadata from "../data/categoryMetadata";
 import { getCollection } from "astro:content";
 import { mapArticlesToStories, sortStoriesByDateDesc } from "../lib/articles";
+import { SITE, absoluteUrl } from "../data/siteMetadata";
+import homepageImage from "../assets/images/posts/cozy-living.jpg";
 
 const articles = await getCollection("articles");
 
@@ -24,9 +26,23 @@ const posts = sortStoriesByDateDesc(mapArticlesToStories(articles));
 const homepageCategories = categoryMetadata
   .filter((category) => category.showOnHomepage)
   .sort((a, b) => a.order - b.order);
+
+const homepageSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: SITE.name,
+  description: SITE.description,
+  url: absoluteUrl("/"),
+  inLanguage: SITE.language,
+  isPartOf: {
+    "@type": "WebSite",
+    name: SITE.name,
+    url: SITE.url,
+  },
+};
 ---
 
-<BaseLayout>
+<BaseLayout image={homepageImage.src} schema={homepageSchema}>
   <Header />
 
   <main>

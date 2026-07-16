@@ -21,13 +21,15 @@
  *       and Twitter Card tags. These vary per page and are grouped in
  *       one reusable component so pages don't have to hand-wire them.
  *
- * Header, Footer, Analytics, and structured data (JSON-LD, schema) are
- * intentionally NOT included at this stage.
+ * Header, Footer, and Analytics are intentionally NOT included here.
  * -----------------------------------------------------------------------------
  */
 
 import "../styles/global.css";
 import SEO from "../components/SEO.astro";
+import StructuredData from "../components/StructuredData.astro";
+import type { JsonLd } from "../components/StructuredData.astro";
+import { SITE, absoluteUrl } from "../data/siteMetadata";
 
 interface Props {
   title?: string;
@@ -35,15 +37,45 @@ interface Props {
   canonical?: string;
   image?: string;
   type?: "website" | "article";
+  schema?: JsonLd | JsonLd[];
 }
 
 const {
   title = "The Wisteria Moonlight | Dreamy Finds for a Softer Everyday",
-  description = "An editorial lifestyle publication — calm, elegant, and timeless.",
+  description = SITE.description,
   canonical,
   image,
   type = "website",
+  schema,
 } = Astro.props;
+
+const baseSchema: JsonLd[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: SITE.name,
+    url: SITE.url,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE.name,
+    url: SITE.url,
+    description: SITE.description,
+    inLanguage: SITE.language,
+    publisher: {
+      "@type": "Organization",
+      name: SITE.name,
+      url: SITE.url,
+    },
+    potentialAction: {
+      "@type": "ReadAction",
+      target: absoluteUrl("/"),
+    },
+  },
+];
+
+const pageSchema = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 ---
 
 <!doctype html>
@@ -72,8 +104,10 @@ const {
       image={image}
       type={type}
     />
+    <StructuredData data={[...baseSchema, ...pageSchema]} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} RSS`} href={absoluteUrl(SITE.rssPath)} />
 
 <!-- Google Fonts: Playfair Display (display), Lora (body), Inter (UI) -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />

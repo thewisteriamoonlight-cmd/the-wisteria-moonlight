@@ -167,33 +167,33 @@ import Navigation from "./Navigation.astro";
   /* -------------------------------------------------------------------------
      Breakpoint: desktop
      ------------------------------------------------------------------------- */
-  @media (min-width: 768px) {
-  .site-header__inner {
-    min-height: 5.5rem;
-    gap: 1rem;
+  @media (min-width: 1024px) {
+    .site-header__inner {
+      min-height: 5.5rem;
+      gap: 1rem;
+    }
+
+    .site-header__brand {
+      font-size: 1.5rem;
+    }
+
+    .site-header__nav {
+      display: block;
+    }
+
+    .site-header__menu {
+      display: none;
+    }
   }
 
-  .site-header__brand {
-    font-size: 1.5rem;
-  }
+  /* Restore the roomier desktop proportions */
+  @media (min-width: 1024px) {
+    .site-header__inner {
+      gap: 2rem;
+    }
 
-  .site-header__nav {
-    display: block;
+    .site-header__brand {
+      font-size: 1.75rem;
+    }
   }
-
-  .site-header__menu {
-    display: none;
-  }
-}
-
-/* Restore the roomier desktop proportions */
-@media (min-width: 1024px) {
-  .site-header__inner {
-    gap: 2rem;
-  }
-
-  .site-header__brand {
-    font-size: 1.75rem;
-  }
-}
 </style>

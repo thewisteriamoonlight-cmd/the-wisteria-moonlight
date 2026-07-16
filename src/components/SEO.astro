@@ -19,16 +19,13 @@
  *   - No page logic
  *   - No article logic
  *   - No category logic
- *   - No JSON-LD, sitemap, RSS, robots, or schema (later milestones)
+ *   - No JSON-LD or schema (BaseLayout owns sitewide structured data)
  *
- * Usage (future — not yet integrated):
- *   <SEO
- *     title="..."
- *     description="..."
- *     canonical="https://thewisteriamoonlight.com/some-path"
- *     image="/og/some-image.jpg"
- *     type="article"
- *   />
+ * Usage:
+ *   BaseLayout integrates this component once for every page and forwards
+ *   page-specific metadata props from route templates. Pages should pass
+ *   title, description, canonical, image, and type through BaseLayout rather
+ *   than rendering SEO.astro directly.
  * ============================================================================
  */
 
@@ -43,10 +40,8 @@ interface Props {
   type?: "website" | "article";
 }
 
-// ----------------------------------------------------------------------------
-// Sensible defaults
-// ----------------------------------------------------------------------------
-const SITE_NAME = "The Wisteria Moonlight";
+import { SITE, absoluteUrl } from "../data/siteMetadata";
+
 const DEFAULT_TYPE: "website" | "article" = "website";
 
 const {
@@ -62,8 +57,10 @@ const {
 // ----------------------------------------------------------------------------
 // Resolve the canonical URL:
 //   - If a canonical is explicitly passed, use it.
-//   - Otherwise, fall back to the current request URL.
-const canonicalURL = canonical ?? Astro.url.href;
+//   - Otherwise, fall back to the current request pathname.
+const canonicalURL = canonical
+  ? absoluteUrl(canonical)
+  : absoluteUrl(Astro.url.pathname);
 
 // Resolve the OG/Twitter image to an absolute URL when possible.
 //   - Only compute this if an image was actually provided.
@@ -75,9 +72,7 @@ if (image) {
   const isAbsolute = /^https?:\/\//i.test(image);
   resolvedImage = isAbsolute
     ? image
-    : Astro.site
-      ? new URL(image, Astro.site).toString()
-      : image;
+    : absoluteUrl(image);
 }
 ---
 
@@ -91,7 +86,8 @@ if (image) {
 <!-- ==========================================================================
      Open Graph
      ========================================================================== -->
-<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:locale" content={SITE.locale} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:type" content={type} />

@@ -6,6 +6,11 @@ heroImage: "../../assets/images/posts/autumn-home.jpg"
 heroImageAlt: "A warm autumn still life with amber candles, a wool throw and foraged branches in a stoneware vase."
 date: 2026-05-27
 readTime: "5 min read"
+author: "The Wisteria Moonlight Editors"
+tags:
+  - autumn
+  - seasonal decorating
+  - home rituals
 ---
 
 Autumn arrives in a home the same way it arrives outdoors: quietly, one small

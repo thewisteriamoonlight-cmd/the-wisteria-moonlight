@@ -4,12 +4,29 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Newsletter from "../components/Newsletter.astro";
 import SectionHeading from "../components/SectionHeading.astro";
+import { SITE, absoluteUrl } from "../data/siteMetadata";
+
+const aboutSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: `About | ${SITE.name}`,
+  description:
+    "A quiet note on the editorial point of view behind The Wisteria Moonlight.",
+  url: absoluteUrl("/about"),
+  inLanguage: SITE.language,
+  isPartOf: {
+    "@type": "WebSite",
+    name: SITE.name,
+    url: SITE.url,
+  },
+};
 ---
 
 <BaseLayout
   title="About | The Wisteria Moonlight"
   description="A quiet note on the editorial point of view behind The Wisteria Moonlight."
   canonical="/about"
+  schema={aboutSchema}
 >
   <Header />
 

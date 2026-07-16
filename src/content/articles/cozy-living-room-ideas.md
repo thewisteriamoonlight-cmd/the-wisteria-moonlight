@@ -6,6 +6,11 @@ heroImage: "../../assets/images/posts/cozy-living.jpg"
 heroImageAlt: "A softly lit living room styled with linen upholstery, textured throws and quiet decorative objects."
 date: 2026-07-05
 readTime: "6 min read"
+author: "The Wisteria Moonlight Editors"
+tags:
+  - living room
+  - home styling
+  - quiet luxury
 featured: true
 ---
 
